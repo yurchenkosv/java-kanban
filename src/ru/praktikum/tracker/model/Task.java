@@ -1,14 +1,12 @@
-package ru.praktikum.local.kanban;
+package ru.praktikum.tracker.model;
 
 
 public class Task {
 
     protected String name;
     protected String description;
-    int id;
-    private Epic epicLink;
-
-    TaskStatus.status status;
+    protected int id;
+    protected TaskStatus.status status;
 
     public Task(String name, String description){
         this.name = name;
@@ -36,13 +34,10 @@ public class Task {
         this.status = status;
     }
 
-    public void setEpicLink(Epic epicLink) {
-        this.epicLink = epicLink;
+    public TaskStatus.status getStatus() {
+        return status;
     }
 
-    public Epic getEpicLink() {
-        return epicLink;
-    }
 
     @Override
     public String toString() {

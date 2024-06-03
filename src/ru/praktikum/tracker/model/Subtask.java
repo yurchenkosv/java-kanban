@@ -1,19 +1,24 @@
-package ru.praktikum.local.kanban;
+package ru.praktikum.tracker.model;
 
 public class Subtask extends Task{
-    private Task headTaskLink;
-    public Subtask(String name, String description, Task headTask){
+
+    private Epic epicLink;
+
+    public Subtask(String name, String description){
         super(name, description);
-        headTaskLink = headTask;
     }
-    public Task getHeadTaskLink() {
-        return headTaskLink;
+
+    public Epic getEpicLink() {
+        return epicLink;
+    }
+
+    public void setEpicLink(Epic epicLink) {
+        this.epicLink = epicLink;
     }
 
     @Override
     public String toString() {
         return "Subtask{" +
-                "headTaskLink=" + headTaskLink +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +

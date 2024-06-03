@@ -1,27 +1,31 @@
-package ru.praktikum.local.kanban;
+package ru.praktikum.tracker.model;
 
 import java.util.ArrayList;
 
 public class Epic extends Task{
-    private ArrayList<Task> linkedTasks;
+    private ArrayList<Subtask> linkedSubTasks;
     public Epic(String name, String description){
         super(name, description);
-        linkedTasks = new ArrayList<>();
+        linkedSubTasks = new ArrayList<>();
     }
 
-    public void LinkTask(Task task){
-        linkedTasks.add(task);
+    public void linkSubtask(Subtask task){
         task.setEpicLink(this);
+        linkedSubTasks.add(task);
     }
 
-    public ArrayList<Task> GetLinkedTasks(){
-        return linkedTasks;
+    public ArrayList<Subtask> getLinkedSubTasks(){
+        return linkedSubTasks;
+    }
+
+    public void cleanSubtaskIds(){
+        linkedSubTasks.clear();
     }
 
     @Override
     public String toString() {
         return "Epic{" +
-                "linkedTasks=" + linkedTasks +
+                "linkedSubTasks=" + linkedSubTasks +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +

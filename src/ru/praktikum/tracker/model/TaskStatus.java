@@ -1,4 +1,4 @@
-package ru.praktikum.local.kanban;
+package ru.praktikum.tracker.model;
 
 public class TaskStatus {
     public enum status {
