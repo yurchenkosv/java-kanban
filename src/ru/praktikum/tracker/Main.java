@@ -1,19 +1,27 @@
 package ru.praktikum.tracker;
 
 import ru.praktikum.tracker.model.Subtask;
+import ru.praktikum.tracker.repository.HistoryRepository;
+import ru.praktikum.tracker.repository.InMemoryHistoryRepository;
 import ru.praktikum.tracker.repository.InMemoryTaskRepository;
 import ru.praktikum.tracker.repository.TaskRepository;
-import ru.praktikum.tracker.service.TaskManager;
+import ru.praktikum.tracker.service.Manager;
 import ru.praktikum.tracker.model.Epic;
 import ru.praktikum.tracker.model.Task;
 import ru.praktikum.tracker.model.TaskStatus;
+import ru.praktikum.tracker.service.TaskManagerBuilder;
 
 public class Main {
 
     public static void main(String[] args) {
         System.out.println("Поехали!");
 
-        TaskRepository repo = new InMemoryTaskRepository();
+        TaskRepository taskRepository = new InMemoryTaskRepository();
+        HistoryRepository historyRepository = new InMemoryHistoryRepository();
+        Manager tm = new TaskManagerBuilder().
+                withTaskRepository(taskRepository).
+                withHistoryRepository(historyRepository).
+                build();
 
         Task firstTestTask = new Task("first test task", " description for first test task");
         Task secondTestTask = new Task("second test task", " description for second test task");
@@ -24,7 +32,6 @@ public class Main {
         Subtask firstSubtask = new Subtask("test subtask", "test decription for subtask");
         Subtask secondSubtask = new Subtask("test subtask", "test decription for subtask");
 
-        TaskManager tm = new TaskManager(repo);
 
         tm.create(firstTestTask);
         tm.create(secondTestTask);
@@ -57,5 +64,6 @@ public class Main {
         System.out.println(tm.getTaskByID(firstTestTask.getId()));
         System.out.println(tm.getTaskByID(secondTestTask.getId()));
 
+        System.out.println(tm.getHistory());
     }
 }

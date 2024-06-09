@@ -1,55 +1,81 @@
 package ru.praktikum.tracker.service;
 
 import ru.praktikum.tracker.model.*;
+import ru.praktikum.tracker.repository.HistoryRepository;
 import ru.praktikum.tracker.repository.TaskRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TaskManager {
+public class TaskManager implements Manager {
 
-    private final TaskRepository repo;
-    private static int taskID;
+    private final TaskRepository taskRepository;
+    private final HistoryRepository historyRepository;
+    protected static int taskID;
 
-    public TaskManager(TaskRepository repository){
-        this.repo = repository;
+    public TaskManager(TaskRepository taskRepository, HistoryRepository historyRepository){
+        this.taskRepository = taskRepository;
+        this.historyRepository = historyRepository;
     }
 
+    @Override
     public void create(Task obj){
         obj.setId(++taskID);
-        repo.add(obj);
+        taskRepository.add(obj);
     }
 
+    @Override
     public void create(Subtask obj){
         obj.setId(++taskID);
-        repo.add(obj);
+        taskRepository.add(obj);
     }
 
+    @Override
     public void create(Epic obj){
         obj.setId(++taskID);
-        repo.add(obj);
+        taskRepository.add(obj);
     }
 
+    @Override
     public Task getTaskByID(Integer id){
-        return repo.getTaskByID(id);
+        Task result =  taskRepository.getTaskByID(id);
+        historyRepository.addTask(result);
+        return result;
     }
 
+    @Override
     public Epic getEpicByID(Integer id){
-        return repo.getEpicByID(id);
+        Epic result = taskRepository.getEpicByID(id);
+        historyRepository.addTask(result);
+        return result;
     }
 
+    @Override
     public Subtask getSubtaskByID(Integer id){
-        return repo.getSubtaskByID(id);
+        Subtask result = taskRepository.getSubtaskByID(id);
+        historyRepository.addTask(result);
+        return result;
     }
 
+    @Override
     public ArrayList<Subtask> getEpicTasks(Epic epic){
-        return epic.getLinkedSubTasks();
+        ArrayList<Subtask> result = epic.getLinkedSubTasks();
+        for (Subtask subtask: result){
+            historyRepository.addTask(subtask);
+        }
+        return result;
     }
 
+    public ArrayList<Task> getHistory(){
+        return historyRepository.getHistory();
+    }
+
+    @Override
     public void update(Task task){
-        repo.update(task);
+        taskRepository.update(task);
     }
 
+    @Override
     public void update(Epic epic){
         ArrayList<Subtask> taskList = epic.getLinkedSubTasks();
         int newCounter = 0;
@@ -69,39 +95,48 @@ public class TaskManager {
             epic.setStatus(TaskStatus.status.IN_PROGRESS);
         }
 
-        repo.update(epic);
+        taskRepository.update(epic);
     }
 
+    @Override
     public void update(Subtask subtask){
         Epic epic = subtask.getEpicLink();
-        repo.update(subtask);
-        this.update(epic);
+        taskRepository.update(subtask);
+        if (epic != null ){
+            this.update(epic);
+        }
     }
 
+    @Override
     public void delete(Task task){
-        repo.delete(task);
+        taskRepository.delete(task);
     }
+    @Override
     public void delete(Subtask subtask){
-        repo.delete(subtask);
+        taskRepository.delete(subtask);
     }
+    @Override
     public void delete(Epic epic){
-        repo.delete(epic);
+        taskRepository.delete(epic);
     }
 
+    @Override
     public void deleteTasks(){
-        repo.deleteAllTasks();
+        taskRepository.deleteAllTasks();
     }
+    @Override
     public void deleteSubtasks(){
-        HashMap<Integer, Epic> epics = repo.getEpics();
+        HashMap<Integer, Epic> epics = taskRepository.getEpics();
         for (Epic epic:epics.values()) {
             epic.cleanSubtaskIds();
             this.update(epic);
         }
-        repo.deleteAllSubtask();
+        taskRepository.deleteAllSubtask();
     }
-    public void deleteEpics(Epic epic){
-        repo.deleteAllEpics();
-        repo.deleteAllSubtask();
+    @Override
+    public void deleteEpics(){
+        taskRepository.deleteAllEpics();
+        taskRepository.deleteAllSubtask();
     }
 
 }
