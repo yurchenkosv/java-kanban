@@ -5,6 +5,7 @@ import ru.praktikum.tracker.model.Subtask;
 import ru.praktikum.tracker.model.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface Manager {
     void create(Task obj);
@@ -22,6 +23,12 @@ public interface Manager {
     ArrayList<Subtask> getEpicTasks(Epic epic);
 
     ArrayList<Task> getHistory();
+
+    List<Epic> getAllEpics();
+
+    List<Subtask> getAllSubtask();
+
+    List<Task> getAllTasks();
 
     void update(Task task);
 

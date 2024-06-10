@@ -5,6 +5,7 @@ import ru.praktikum.tracker.model.Subtask;
 import ru.praktikum.tracker.model.Task;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface TaskRepository {
      void  add(Task obj);
@@ -15,9 +16,9 @@ public interface TaskRepository {
      Epic getEpicByID(Integer id);
      Subtask getSubtaskByID(Integer id);
 
-     HashMap<Integer, Task> getTasks();
-     HashMap<Integer, Epic> getEpics() ;
-     HashMap<Integer, Subtask> getSubtasks();
+     List<Task> getTasks();
+     List<Epic> getEpics() ;
+     List<Subtask> getSubtasks();
 
      void update(Task obj);
      void update(Epic obj);

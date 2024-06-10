@@ -4,7 +4,9 @@ import ru.praktikum.tracker.model.Epic;
 import ru.praktikum.tracker.model.Subtask;
 import ru.praktikum.tracker.model.Task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class InMemoryTaskRepository implements TaskRepository {
     private HashMap<Integer, Task> tasks;
@@ -37,16 +39,16 @@ public class InMemoryTaskRepository implements TaskRepository {
         return subtasks.get(id);
     }
 
-    public HashMap<Integer, Task> getTasks() {
-        return tasks;
+    public List<Task> getTasks() {
+        return new ArrayList<>(tasks.values());
     }
 
-    public HashMap<Integer, Epic> getEpics() {
-        return epics;
+    public List<Epic> getEpics() {
+        return new ArrayList<>(epics.values());
     }
 
-    public HashMap<Integer, Subtask> getSubtasks() {
-        return subtasks;
+    public List<Subtask> getSubtasks() {
+        return new ArrayList<>(subtasks.values());
     }
 
     public void update(Task obj){

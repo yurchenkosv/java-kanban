@@ -5,7 +5,7 @@ import ru.praktikum.tracker.repository.HistoryRepository;
 import ru.praktikum.tracker.repository.TaskRepository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 public class TaskManager implements Manager {
 
@@ -70,6 +70,19 @@ public class TaskManager implements Manager {
         return historyRepository.getHistory();
     }
 
+
+    public List<Epic> getAllEpics(){
+        return taskRepository.getEpics();
+    }
+
+    public List<Subtask> getAllSubtask(){
+        return taskRepository.getSubtasks();
+    }
+
+    public List<Task> getAllTasks(){
+        return taskRepository.getTasks();
+    }
+
     @Override
     public void update(Task task){
         taskRepository.update(task);
@@ -126,8 +139,8 @@ public class TaskManager implements Manager {
     }
     @Override
     public void deleteSubtasks(){
-        HashMap<Integer, Epic> epics = taskRepository.getEpics();
-        for (Epic epic:epics.values()) {
+        List< Epic> epics = taskRepository.getEpics();
+        for (Epic epic:epics) {
             epic.cleanSubtaskIds();
             this.update(epic);
         }
